@@ -856,6 +856,10 @@
 // STATE & STORAGE
 // ============================================================
 const STORAGE_KEY = "estatum_v1";
+
+// لێرە لینکی Google Apps Script Web App دابنێ بۆ ئەوەی بە شێوەیەکی خۆکار کار بکات
+const https://script.google.com/macros/s/AKfycbycD9jSK1i16uETPjCIPW00jRP59e1agUVRCby-kcAh/dev = ""; 
+
 let state = null;
 
 // كشف توفر localStorage (قد لا يكون متاحاً في file:// أو الوضع الخاص)
@@ -2418,7 +2422,7 @@ function openBookingModal(farmId,editId,prefilledDate){
     toast(editing?"تم تحديث الحجز":"تم تأكيد الحجز");
 
     // مزامنة تلقائية مع جوجل شيت عند إضافة أو تعديل حجز
-    if(state.settings.googleSheetsUrl) syncToGoogleSheets(true);
+    syncToGoogleSheets(true);
   });
 }
 
@@ -2428,7 +2432,7 @@ function deleteBooking(id){
   saveState(); closeModal(); navigate(currentView);
   toast("تم الحذف");
   // تحديث جوجل شيت بعد حذف حجز
-  if(state.settings.googleSheetsUrl) syncToGoogleSheets(true);
+  syncToGoogleSheets(true);
 }
 
 // ============================================================
@@ -3149,8 +3153,8 @@ function saveGoogleSheetsSettings() {
 }
 
 async function syncToGoogleSheets(silent = false) {
-    const url = state.settings.googleSheetsUrl;
-    if(!url) { if(!silent) toast("يرجى إدخال رابط Web App أولاً", "error"); return; }
+    const url = HARDCODED_GOOGLE_SCRIPT_URL || state.settings.googleSheetsUrl;
+    if(!url) { if(!silent) console.log("Google Sheets URL not configured."); return; }
     
     if(!silent) toast("بدء المزامنة مع Google Sheets...");
     try {
